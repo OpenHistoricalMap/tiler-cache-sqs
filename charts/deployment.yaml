@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tiler-cache-sqs
+  labels:
+    app: tiler-cache-sqs
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tiler-cache-sqs
+  template:
+    metadata:
+      labels:
+        app: tiler-cache-sqs
+    spec:
+      serviceAccountName: job-service-account
+      nodeSelector:
+        nodegroup_type: web_large
+      containers:
+      - name: tiler-cache-sqs
+        image: rub21/tiler-cache-sqs:v1
+        command: ["sleep"]
+        args: ["300000"]
+        env:
+        - name: SQS_QUEUE_URL
+          value: "http://example"
+        - name: REGION_NAME
+          value: "us-east-1"
+        resources:
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+        ports:
+        - containerPort: 8080

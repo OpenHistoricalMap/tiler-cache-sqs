@@ -1,0 +1,14 @@
+services:
+  tiler:
+    platform: linux/amd64
+    image: rub21/tiler-cache-sqs:v1
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./:/app
+    ports:
+      - '8000:8000'
+    env_file:
+      - .env
+    # working_dir: /app
